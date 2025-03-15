@@ -1,0 +1,139 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=2.5cm,right=2.5cm,marginparwidth=1.25cm]{geometry}
+
+\usepackage[leqno]{amsmath}
+\usepackage{enumitem, nccmath,lipsum,amssymb,xcolor,xparse,listings, blindtext}
+\usepackage[most]{tcolorbox}
+
+\NewDocumentCommand{\codeword}{v}{
+\texttt{\textcolor{blue}{#1}}
+}
+
+\lstset{language=C, keywordstyle={\bfseries \color{blue}}}
+
+\NewDocumentCommand{\mynote}{+O{}+m}{%
+  \begingroup
+  \tcbset{%
+    noteshift/.store in=\mynote@shift,
+    noteshift=1.5cm
+  }
+  \begin{tcolorbox}[nobeforeafter,
+    enhanced,
+    sharp corners,
+    toprule=0.5pt,
+    bottomrule=0.5pt,
+    leftrule=0pt,
+    rightrule=0pt,
+    colback=green!10,
+    #1,
+    left skip=\mynote@shift,
+    right skip=\mynote@shift,
+    overlay={\node[right] (mynotenode) at ([xshift=-\mynote@shift]frame.west) {\textbf{Note:}} ;},
+    ]
+    #2
+  \end{tcolorbox}
+  \endgroup
+  }
+\makeatother
+
+\newcommand{\mytext}[1]% #1 = same as intertext
+{&\parbox{0.9\textwidth}{\rule{0pt}{.5\baselineskip}\\
+\textrm{#1}\\
+\rule{0pt}{.5\baselineskip}}&\\}
+
+\newcounter{exercise}
+\newcounter{problem}[exercise]
+\newcommand{\myitem}{\stepcounter{problem}\tag*{\alph{problem})}}
+
+\title{Iterated Function Systems (IFS). Chaos Games.}
+\author{Mashenkov Timofei}
+\begin{document}
+\maketitle{}
+
+\section*{Introduction. Koch's Curve.}
+
+Fractal steel do not have the definition, but should implement several properties:
+
+\begin{itemize}
+  \item It is self-similar.
+  \item Belongs to float size set.
+    \begin{itemize}
+      \item To one value of x there are several values of y. (ambiguity)
+    \end{itemize}
+\end{itemize}
+
+Also, the property of Koch's curve is that it is growing on each iteration. For the simplest example with unit line it
+is the following: 1, $4/3$, $(\frac{4}{3})^2$, $\dots$
+
+\begin{equation*}
+  L = \lim_{n \to \infty} \left(\frac{4}{3}\right)^n \to \infty
+\end{equation*}
+
+\section*{L-Systems}
+
+\begin{center}
+  \begin{tabular}{ |c|c|c| }
+    \hline 
+    Python command & Symbol & Description \\
+    \hline 
+    forward(x) & F & Move forward by x units \\
+    backward(x) & B & Move backward by x units \\
+    left(x) & L & Turn left by x degrees \\
+    right(x) & R & Turn right by x degrees \\
+    \hline
+  \end{tabular} 
+\end{center}
+
+So the simplest curve generating will be the following sequence:
+
+\begin{center}
+  \begin{tabular}{|c|c|c|c|c|c|c|c|}
+    \hline
+    F & L & F & R & R & F & L & F \\
+    \hline
+  \end{tabular} 
+\end{center}
+
+To get the fractal, we need to repeat this sequence several times and take \textbf{the rule:}
+Each symbol \textit{F} on new iteration will be replaced by the sequence itself.
+
+\section*{Fractal dimension.}
+
+\begin{equation}
+  N \cdot r^d = 1
+\end{equation}
+
+\begin{equation}
+  \begin{aligned}
+    \log{(N \cdot r^d)} = \log{1} \\ 
+    \log{N} + d \cdot \log{r} = 0 \\ 
+    d \cdot \log{r} = -\log{N} \\
+    -d \cdot \log{(1/r)}  -\log{N} \\ 
+    d = \frac{\log{N}}{\log{1/r}}
+  \end{aligned}
+\end{equation}
+
+\section*{Iterated Function Systems.}
+
+At each iteration we apply several compressive functions on the set of points.
+
+\begin{equation}
+  E_1 = T_1(E_0)\lor T_2(E_0) \lor T_3(E_0)
+\end{equation}
+
+\begin{equation}
+  T_1(\begin{bmatrix}
+    x\\y
+  \end{bmatrix}) = \begin{bmatrix}
+  0.5&0\\0&0.5
+  \end{bmatrix}\cdot\begin{bmatrix}
+   x\\y 
+  \end{bmatrix}
+  +
+  \begin{bmatrix}
+    0 \\ 0
+  \end{bmatrix}
+\end{equation}
+
+\end{document}

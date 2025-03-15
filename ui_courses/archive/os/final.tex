@@ -1,0 +1,311 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=2.5cm,right=2.5cm,marginparwidth=1.25cm]{geometry}
+
+\usepackage[leqno]{amsmath}
+\usepackage{enumitem, nccmath,lipsum,amssymb,xcolor,xparse,listings, blindtext,array}
+\usepackage[most]{tcolorbox}
+
+\NewDocumentCommand{\codeword}{v}{
+\texttt{\textcolor{blue}{#1}}
+}
+
+\lstset{language=C, keywordstyle={\bfseries \color{blue}}}
+
+\NewDocumentCommand{\mynote}{+O{}+m}{%
+  \begingroup
+  \tcbset{%
+    noteshift/.store in=\mynote@shift,
+    noteshift=1.5cm
+  }
+  \begin{tcolorbox}[nobeforeafter,
+    enhanced,
+    sharp corners,
+    toprule=0.5pt,
+    bottomrule=0.5pt,
+    leftrule=0pt,
+    rightrule=0pt,
+    colback=green!10,
+    #1,
+    left skip=\mynote@shift,
+    right skip=\mynote@shift,
+    overlay={\node[right] (mynotenode) at ([xshift=-\mynote@shift]frame.west) {\textbf{Note:}} ;},
+    ]
+    #2
+  \end{tcolorbox}
+  \endgroup
+  }
+\makeatother
+
+\newcommand{\mytext}[1]% #1 = same as intertext
+{&\parbox{0.9\textwidth}{\rule{0pt}{.5\baselineskip}\\
+\textrm{#1}\\
+\rule{0pt}{.5\baselineskip}}&\\}
+
+\newcounter{exercise}
+\newcounter{problem}[exercise]
+\newcommand{\myitem}{\stepcounter{problem}\tag*{\alph{problem})}}
+
+\title{Operating Systems: Final Exam}
+\author{Mashenkov Timofei}
+\begin{document}
+\maketitle{}
+
+\section*{Lecture 1. General.}
+\noindent
+
+\subsection*{OS Zoo.}
+\noindent
+
+\begin{itemize}
+  \item Mainframe: large room-stations with a lot of I/O work: batch, transaction-processing, time-sharing
+  \item Server: FreeBSD, Windows Server, Solaris
+  \item Multiprocessor: Linux, Windows
+  \item HandHeld: iOS, Android
+  \item Embedded: Linux, QNX, VxWorks
+  \item Sensor-Node: TinyOS 
+  \item Real-Time: QNX
+\end{itemize}
+
+\section*{Processes and Threads}
+\noindent
+
+A process is an \textbf{abstraction} of a running program.
+\textbf{Pseudo parallelism} is an illusion of real parallelism, when processor switches between different processes.
+
+\textbf{Conceptually} each process has its own CPU, feeling line "the main one", but in reality CPU switches between
+them, so-called \textbf{multiprogramming}.
+\newline
+
+\mynote{A program is like recipe, itself it's doing nothing. But process is a running instance of program, including
+program, input, output, and a state.}
+
+Process and its children create \textbf{process hierarchy}. In UNIX, they together form a \textbf{process group}.
+
+The OS maintains a table of process and their state, also called process control block.
+
+Each entity contains:
+
+\begin{itemize}
+  \item its program counter
+  \item stack pointer
+  \item memory allocation 
+  \item the status of its open files
+  \item its accounting and scheduling info, etc.
+\end{itemize}
+
+\subsection*{Interrupts.}
+\noindent
+
+Interrupt is a \textbf{signal} that a process is to be \textbf{rescheduled}, the following is proceed:
+
+\begin{enumerate}
+  \item Hardware stacks program counter, etc. 
+  \item Hardware loads new programs from interrupt vector.
+  \item Assembly language procedure saved registers. 
+  \item Assembly language procedure sets up new stack.
+  \item C interrupts service runs.
+  \item Scheduler decides which process to run next.
+  \item C procedure returns to assembly code.
+  \item Assembly language procedure loads new program.
+\end{enumerate}
+
+\subsection*{Threads.}
+\noindent
+
+\begin{center}
+  \begin{tabular}{| m{4.2cm} | m{3cm} |}
+    \hline \\[-1em]
+    \textbf{Per process items} & \textbf{Per thread items} \\
+    \hline \\[-1em]
+    Address space & Program counter \\ 
+    \hline \\[-1em]
+    Global variables & Registers \\ 
+    \hline \\[-1em]
+    Open files & Stack \\ 
+    \hline \\[-1em]
+    Child processes & State \\ 
+    \hline \\[-1em]
+    Pending alarms & \\ 
+    \hline \\[-1em]
+    Signals and signal handlers & \\ 
+    \hline \\[-1em]
+    Accounting information &  \\ 
+    \hline
+  \end{tabular}
+\end{center}
+
+\subsection*{CPU Utilization (Degree of Multiprogramming).}
+\noindent
+
+It is the function showing the number of processes in memory $CPU\ Utilization = 1 - p^n$.
+
+\section*{Interprocess Communication.}
+\noindent
+
+\textbf{InterProcess Communication} or \textbf{IPC} should be carried out in a well-structured way not using interrupts.
+
+\subsection*{Avoiding Race Conditions.}
+\noindent
+
+\begin{itemize}
+  \item Critical Regions
+  \item Mutual Exclusion and Busy Waiting
+  \item Sleep and Wake-up 
+  \item Semaphores 
+  \item Mutexes 
+  \item Monitors 
+  \item Message Passing
+  \item Barriers 
+  \item Avoiding Locks: Read-Copy-Update
+\end{itemize}
+
+\subsection*{Critical Regions.}
+\noindent
+
+A way to prohibit more than one process read or write shared data at the same time is called \textbf{mutual exclusion}.
+
+Place where the shared memory is accessed are called \textbf{critical region} or \textbf{critical section}.
+
+Requirements to implement critical regions:
+
+\begin{itemize}
+  \item No two processes may be simultaneously inside their critical regions.
+  \item No assumptions may be made about speed or the number of CPUs.
+  \item No process running outside its critical region may block other processes.
+  \item No process should have to wait forever to enter its critical region.
+\end{itemize}
+
+\textbf{Disabling Interrupts.}
+
+Each process disable its interrupts entering the critical region and re-enable them before leaving.
+
+Issues:
+
+\begin{itemize}
+  \item if process do not re-enable interrupts it will stop the system
+  \item do not work in multiprocessor system, since interrupts stop for single CPU
+\end{itemize}
+
+\textbf{Lock Variables.}
+
+The idea is to introduce new logic variables and change it value on each entering/leaving. Contains the same fatal flaw
+as in previous case.
+
+\subsection*{Strict Alternation.}
+\noindent
+
+Implement complementary logic using \textbf{turn} variable.
+
+Since method contains tight loop, it calls \textbf{busy waiting}, and the variable itself \textbf{spin-lock}.
+
+\subsection*{Sleep and Wake-up.}
+\noindent
+
+Peterson's solution and solutions using TSL (Test Set Lock) or XCHG (Exchange Register) have \textbf{busy waiting}.
+
+Producer-consumer problem, fixed shared buffer, complement variable \textbf{count} to compare the total number to \textit{N} or \textit{0}.
+
+\subsection*{Semaphores.}
+\noindent
+
+\begin{itemize}
+  \item Proposed by Dijkstra In 1965 
+  \item an integer variable to count the number of wake-ups saved for future use - a \textbf{semaphore}
+  \item has a positive value if one or more wake-ups were pending, 0 otherwise
+  \item two operations: \textbf{down} and \textbf{up} (generalizations of sleep a \textbf{wake-up}, respectively)
+  \item the down operation checks if the value is greater than 0. If so, it decrements the value (i.e., uses up one
+    stored wake-up) and just continues
+\end{itemize}
+
+We used semaphores in two different ways:
+
+\begin{itemize}
+  \item The \textit{mutex} semaphore is used for mutual exclusion. It is designed to guarantee that only one process at a time will be reading or writing the buffer and the associated variables
+  \item The other use of semaphores is for \textbf{synchronization}. The \textit{full} and \textit{empty} semaphores are needed to guarantee that certain event sequences do or do not occur.
+\end{itemize}
+
+\subsection*{Monitors.}
+
+\begin{itemize}
+  \item A \textbf{monitor} is a higher-level synchronization primitive - it is a collection of procedures, variables, and data structures that are all grouped together in a special kind of module or package
+  \item Processes may call the procedures in a monitor, but they cannot access directly
+\end{itemize}
+
+\subsection*{Message Passing.}
+\noindent
+
+Is the method of IPC that uses two primitives, \textbf{send} and \textbf{receive}, which, like semaphores and unlike monitors, are system calls rather than language constructs
+
+They can easily be put into library procedures.
+
+\section*{Additional: TSL Instruction.}
+
+\begin{itemize}
+  \item Hardware-assisted approach; works with multiple CPUs
+  \item An instruction like \textbf{TSL TX, LOCK} (Test and Set Lock) reads the contents of the memory work lock into register RX and then sets lock to be a nonzero value
+  \item The operations of reading the word and storing into it are guaranteed to be indivisible
+  \item Different from disabling interrupts - doing it on processor 1 has no effect at all on processor 2
+\end{itemize}
+
+\subsection*{More on mutexes.}
+
+Can be realized with code primitives, do not need kernel functions, often have \textit{mutex\_lock} and \textit{mutex\_unlock} functions
+
+If processes have disjoint address spaces how can they share the \textbf{turn} variable, semaphores or a common buffer? 
+
+\begin{itemize}
+  \item Some of the shared data structures, such as the semaphores, can be stored in the kernel and accessed only by means of system calls
+  \item Most modern OSs offer a way for processes to share some portion of their address spaces with other processes. In this way, buffers and other data structures can be shared.
+\end{itemize}
+
+\subsection*{More on Monitors.}
+\noindent
+
+Problem with monitors, and also with semaphores, is that they were designed for solving the mutual exclusion problem on one or more CPUs that all \textbf{have access to a common memory}. In a distributed system consisting of multiple CPUs, each with its own private memory, these primitives become inapplicable.
+
+\section*{Scheduling.}
+\noindent
+
+\begin{itemize}
+  \item Batch systems: just run the next job on the tape 
+  \item Multiprogramming systems: multiple users are waiting for service and CPU time is a scarce resource, so the scheduling algorithm became more complex 
+  \item Personal computers: users are usually working in one application at a time and CPUs became much faster. As a consequence, scheduling does not matter much on simple PCs
+  \item Network servers: multiple processes often do compete for the CPU, o scheduling matters again 
+  \item Mobile devices: since battery lifetime is one of the most important constrains on these devices, some schedulers try to optimize the power consumption
+\end{itemize}
+
+\subsection*{When to schedule?}
+
+\begin{itemize}
+  \item when a new process is created 
+  \item when a process exits
+  \item when a process blocks on I/O or on a semaphore 
+  \item when I/O interrupt occurs
+\end{itemize}
+
+A \textbf{nonpreemptive} scheduling algorithm do not make scheduling decisions during clock interrupts.
+A \textbf{preemptive} scheduling algorithm picks a process and lets it run for a maximum of some fixed time. 
+
+\subsection*{Goals.}
+
+\begin{itemize}
+  \item Fairness - giving each process a fair share of the CPU 
+  \item Policy enforcement - seeing that stated policy is carried out 
+  \item Balance - keeping all parts of the system busy. If the CPU and all the I/O devices can be kept running all the time, more work gets done per second than if some of the components are idle
+\end{itemize}
+
+\subsection*{Scheduling in Batch Systems.}
+
+\begin{itemize}
+  \item First-Come First-Served 
+    \begin{itemize}
+      \item processes are assigned the CPU in the order they request it
+      \item when the jobs come in, they are put int the end of the queue
+      \item when the running process blocks, the first process in the queue is run next 
+      \item when a blocks process becomes ready, like a newly arrived job, it is put in the end of the queue, behind all waiting processes
+    \end{itemize}
+\end{itemize}
+
+
+\end{document}

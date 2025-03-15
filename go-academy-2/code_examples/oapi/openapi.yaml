@@ -1,0 +1,195 @@
+openapi: "3.0.0"
+
+info:
+  title: Task Tracker API
+  description: API for managing tasks
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080/{version}
+    variables:
+      version:
+        default: "v1"
+  - url: https://production/api/{version}
+    variables:
+      version:
+        default: "v1"
+
+tags:
+  - name: open
+    description: open methods
+  - name: secure
+    description: authorized methods
+
+paths:
+  /tasks:
+    get:
+      tags:
+        - open
+      summary: Get all tasks
+      responses:
+        "200":
+          description: A list of tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Task"
+    post:
+      tags:
+        - secure
+      summary: Create new task
+      security:
+        - ApiKeyAuth: []
+      operationId: createTask
+      requestBody:
+        $ref: "#/components/requestBodies/TaskInputField"
+      responses:
+        "201":
+          description: Task successfully created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+        default:
+          description: Error on creating task
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DefaultError"
+
+  /tasks/{taskId}:
+    parameters:
+      - name: taskId
+        in: path
+        required: true
+        description: ID of the task
+        schema:
+          type: string
+          format: uuid
+
+    get:
+      tags:
+        - open
+      summary: Get task by ID
+      operationId: getTaskById
+      responses:
+        "200":
+          description: Task found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+        "404":
+          description: Task not found
+
+    put:
+      tags:
+        - secure
+      summary: Update task by ID
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        $ref: "#/components/requestBodies/TaskInputField"
+      responses:
+        "200":
+          description: Task updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+        "404":
+          description: Task not found
+        default:
+          description: Error on updating task
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DefaultError"
+
+    delete:
+      tags:
+        - secure
+      summary: Delete task by ID
+      security:
+        - ApiKeyAuth: []
+      responses:
+        "204":
+          description: Task deleted
+        "404":
+          description: Task not found
+        default:
+          description: Error on deleting task
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DefaultError"
+
+components:
+  schemas:
+    Task:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the task
+        title:
+          type: string
+          description: Title of the task
+        description:
+          type: string
+          description: Detailed description of the task
+        completed:
+          type: boolean
+          description: Status of the task
+        createdAt:
+          type: string
+          format: date-time
+          description: Date and time when the task was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date and time when the task was last updated
+
+    TaskInput:
+      type: object
+      required:
+        - title
+      properties:
+        title:
+          type: string
+          description: Title of the task
+        description:
+          type: string
+          description: Detailed description of the task
+        completed:
+          type: boolean
+          default: false
+          description: Status of the task
+
+    DefaultError:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+
+  requestBodies:
+    TaskInputField:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/TaskInput"
+
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: API-Key
+      in: header

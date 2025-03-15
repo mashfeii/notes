@@ -1,0 +1,217 @@
+{
+  "main": {
+    "id": "347a0715bb943d79",
+    "type": "split",
+    "children": [
+      {
+        "id": "6c0de313056fd0a1",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "1002e45735175467",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "go-academy-2/week-1-seminar.md",
+                "mode": "preview",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "week-1-seminar"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "dfbb680b93959d11",
+    "type": "split",
+    "children": [
+      {
+        "id": "af29569c5f7d0ee0",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "4751c774f938d8fc",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "db20d546f8b97793",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "9b4bf9bf3b7767af",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200,
+    "collapsed": true
+  },
+  "right": {
+    "id": "80b2adabfa3d1a21",
+    "type": "split",
+    "children": [
+      {
+        "id": "85311fc264d32197",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "75364f30df125378",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "go-academy/seminar_11.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for seminar_11"
+            }
+          },
+          {
+            "id": "6e9b8e769b2fe7d8",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "other_notes/chvk_differential_21.10.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from chvk_differential_21.10"
+            }
+          },
+          {
+            "id": "8ce9914397e29eef",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "23bd50efd9fefde3",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "go-academy/week-13-lecture.md"
+              },
+              "icon": "lucide-list",
+              "title": "Outline of week-13-lecture"
+            }
+          }
+        ],
+        "currentTab": 3
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "1002e45735175467",
+  "lastOpenFiles": [
+    "go-academy-2/go.mod",
+    "go-academy-2/week-1/simple_server.go~",
+    "go-academy-2/week-1/simple_server.go",
+    "go-academy-2/week-1",
+    "go-academy-2/week-1-seminar.md~",
+    "ui_courses/networks/week-4-lecture.out",
+    "ui_courses/networks/week-4-lecture.synctex(busy)",
+    "ui_courses/networks/week-4-lecture.log",
+    "ui_courses/networks/week-4-lecture.fls",
+    "ui_courses/networks/pdflatex134992.fls",
+    "ui_courses/networks/week-4-lecture.fdb_latexmk",
+    "attachments/boot-order.jpg",
+    "attachments/Ср 22 янв 2025 19:10:44 MSK.jpg",
+    "attachments/fdisk.jpg",
+    "attachments/booting.jpg",
+    "attachments/Ср 22 янв 2025 15:03:38 MSK.jpg",
+    "attachments/uname.jpg",
+    "attachments/Ср 22 янв 2025 14:05:29 MSK.jpg",
+    "go-academy/week-11-seminar.md",
+    "go-academy/week-9-seminar.md",
+    "go-academy/week-7-seminar.md",
+    "go-academy/week-6-seminar.md",
+    "go-academy/week-5-seminar.md",
+    "go-academy/week-4-seminar.md",
+    "go-academy/week-2-lecture.md",
+    "other_notes/Header files.md",
+    "linux-inside/linux-organization.md",
+    "other_notes/userver.md",
+    "other_notes/tcp, ip.md",
+    "other_notes/git.md",
+    "other_notes/chvk_differential_21.10.md",
+    "examples/part1/badtestcode.md",
+    "go-academy/week-12-seminar.md",
+    "go-academy/week-13-seminar.md",
+    "go-academy/week-14-lecture.md",
+    "go-academy/week-14-seminar.md",
+    "go-academy/week-15-seminar.md",
+    "ui_courses/probstat/week-11-lab.md",
+    "go-academy/seminar_11.md",
+    "ui_courses/diff/week-10-lab.md",
+    "ui_courses/ai_intro/first-assignment.md",
+    "ui_courses/ai_intro/week-3-lecture.md",
+    "ui_courses/ai_intro/week-2-lecture.md",
+    "Pasted image 20240604193937.png",
+    "attachments/2-3_tree_operations.png",
+    "attachments/linked-tree-representation.png",
+    "UI_Courses/SSAD/Untitled.canvas"
+  ]
+}

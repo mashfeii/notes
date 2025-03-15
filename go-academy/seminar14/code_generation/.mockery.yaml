@@ -1,0 +1,4 @@
+with-expecter: true
+# mockname: "{{.InterfaceName | firstUpper}}"
+# filename: "{{.InterfaceName | snakecase}}.go"
+outpkg: mocks

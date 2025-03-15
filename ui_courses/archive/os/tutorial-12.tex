@@ -1,0 +1,101 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=2.5cm,right=2.5cm,marginparwidth=1.25cm]{geometry}
+
+\usepackage[leqno]{amsmath}
+\usepackage{enumitem, nccmath,lipsum,amssymb,xcolor,xparse,listings, blindtext,array}
+\usepackage[most]{tcolorbox}
+
+\NewDocumentCommand{\codeword}{v}{
+\texttt{\textcolor{blue}{#1}}
+}
+
+\lstset{language=C, keywordstyle={\bfseries \color{blue}}}
+
+\NewDocumentCommand{\mynote}{+O{}+m}{%
+  \begingroup
+  \tcbset{%
+    noteshift/.store in=\mynote@shift,
+    noteshift=1.5cm
+  }
+  \begin{tcolorbox}[nobeforeafter,
+    enhanced,
+    sharp corners,
+    toprule=0.5pt,
+    bottomrule=0.5pt,
+    leftrule=0pt,
+    rightrule=0pt,
+    colback=green!10,
+    #1,
+    left skip=\mynote@shift,
+    right skip=\mynote@shift,
+    overlay={\node[right] (mynotenode) at ([xshift=-\mynote@shift]frame.west) {\textbf{Note:}} ;},
+    ]
+    #2
+  \end{tcolorbox}
+  \endgroup
+  }
+\makeatother
+
+\newcommand{\mytext}[1]% #1 = same as intertext
+{&\parbox{0.9\textwidth}{\rule{0pt}{.5\baselineskip}\\
+\textrm{#1}\\
+\rule{0pt}{.5\baselineskip}}&\\}
+
+\newcounter{exercise}
+\newcounter{problem}[exercise]
+\newcommand{\myitem}{\stepcounter{problem}\tag*{\alph{problem})}}
+
+\title{Operating Systems: Input/Output}
+\author{Mashenkov Timofei}
+\begin{document}
+\maketitle{}
+
+\section*{RAID Systems}
+
+\subsection*{General Information}
+
+\begin{fleqn}
+  \begin{tabular}{| m{1cm} | m{12cm} |}
+    \hline
+    RAID & Description  \\ 
+    \hline
+    0 & Stripping only, no mirroring, no parity checks \\ 
+    \hline
+    1 & Mirroring with or without striping; no parity checks \\ 
+    \hline
+    2 & Bit-level striping with Hamming-code based parity; one byte is split into two parts, three parity bits are
+    added; resulting bits are written to seven disks, one bit per disk (all disks' rotation is synchronized) \\
+    \hline
+    3 & Bit-level striping with a parity bit computed for each word and stored on dedicated party drive \\ 
+    \hline
+    4 & Strip-for-strip parity: all the strips are XOR'ed together, resulting in a parity strip \\ 
+    \hline
+    5 & The same as RAID 4, except that parity bits are distributed across all the drives in round-robin fashion \\
+    \hline
+  \end{tabular}
+\end{fleqn}
+
+\subsection*{Reliability}
+
+\begin{fleqn}
+  \begin{tabular}{| m{1cm} | m{12cm} |}
+    \hline
+    RAID & Reliability \\ 
+    \hline
+    0 & No reliability \\ 
+    \hline
+    1 & Can survive one disk crash \\ 
+    \hline
+    2 & Can survive one disk crash; a single random bit error in a word can be detected and corrected \\
+    \hline
+    3 & Can survive one disk crash; a single random bit error in a word can be detected \\ 
+    \hline
+    4 & Can survive one disk crash; a single random bit error in a word can be detected \\ 
+    \hline
+    5 & Can survive one disk crash; a single random bit error in a word can be detected \\
+    \hline
+  \end{tabular}
+\end{fleqn}
+
+\end{document}

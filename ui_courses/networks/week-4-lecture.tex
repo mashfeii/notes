@@ -1,0 +1,98 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=2.5cm,right=2.5cm,marginparwidth=1.25cm]{geometry}
+
+\usepackage[leqno]{amsmath}
+\usepackage{enumitem, nccmath,lipsum,amssymb,xcolor,xparse,listings, blindtext, hyperref, float, booktabs, tabularx}
+\usepackage[most]{tcolorbox}
+
+\NewDocumentCommand{\codeword}{v}{
+\texttt{\textcolor{blue}{#1}}
+}
+
+\lstset{language=C, keywordstyle={\bfseries \color{blue}}}
+
+\NewDocumentCommand{\mynote}{+O{}+m}{%
+  \begingroup
+  \tcbset{%
+    noteshift/.store in=\mynote@shift,
+    noteshift=1.5cm
+  }
+  \begin{tcolorbox}[nobeforeafter,
+    enhanced,
+    sharp corners,
+    toprule=0.5pt,
+    bottomrule=0.5pt,
+    leftrule=0pt,
+    rightrule=0pt,
+    colback=green!10,
+    #1,
+    left skip=\mynote@shift,
+    right skip=\mynote@shift,
+    overlay={\node[right] (mynotenode) at ([xshift=-\mynote@shift]frame.west) {\textbf{Note:}} ;},
+    ]
+    #2
+  \end{tcolorbox}
+  \endgroup
+  }
+\makeatother
+
+\newcommand{\mytext}[1]% #1 = same as intertext
+{&\parbox{0.9\textwidth}{\rule{0pt}{.5\baselineskip}\\
+\textrm{#1}\\
+\rule{0pt}{.5\baselineskip}}&\\}
+
+\newcounter{exercise}
+\newcounter{problem}[exercise]
+\newcommand{\myitem}{\stepcounter{problem}\tag*{\alph{problem})}}
+
+\title{Lecture Week 4.\\ Electronic Mail Timeline}
+\author{Mashenkov Timofei CBS-02 \\ \href{mailto:t.mashenkov@innopolis.university}{t.mashenkov@innopolis.university}}
+\begin{document}
+\maketitle{}
+
+\section*{Electronic Mail Timeline}
+
+\begin{itemize}
+	\item \textbf{1961. MIT Compatible Time-Sharing System (CTSS):} \\
+	      The first general time-sharing OS to support simultaneous users to MIT's IBM 7094 computer from remote terminals (typewriters)
+	\item \textbf{1965. "MAIL" command in CTSS operating system:} \\
+	      Communication between remote clients by using a shared text file stored on a central hard disk
+	\item \textbf{1971. ARPANET's network email system by Ray Tomlinson:} \\
+	      Based on FTP for files transfer, limited to an internal network; \\
+	      Introduced electronic mail destination addresses of type "username@name of computer"
+	\item \textbf{1972. The first email management tool by Larry Roberts}\\
+	      (also in the scope of ARPANET project): \\
+	      To reply, forward, select, and other operations with emails
+	\item \textbf{1976. First attempts of electronic mail sending to external networks}
+	\item \textbf{1981. SMTP protocol release} \\
+	      (implemented on the ARPANET network in 1983): \\
+	      Communication over the Internet between different computers spreads
+	\item \textbf{1980s. Multiple LAN email systems emerged}
+	\item \textbf{1988, 1989. Eudora by Steve Dorner and Lotus Notes applications for email management:} \\
+	      Email management application with grahpical user interfaces
+	\item \textbf{1993-1996. AOL, Echomail, Hotmail, Yahoo Mail services} \\
+	      Email services directly in Internet browsers
+	\item \textbf{1996. Internet Mail and News 1.0 service by Microsoft:} \\
+	      Later renamed into Outlook
+\end{itemize}
+
+\section*{Email Address Format}
+
+Was specified by IETF organization in RFC 5322 and 6854, examples:
+
+\begin{itemize}
+	\item \codeword{ithelp@university.innopolis.ru}
+	\item \codeword{"it help"@university.innopolis.ru}
+\end{itemize}
+
+\mynote{$<local\_part> @ <domain\_name>$}
+
+\begin{itemize}
+  \item \textbf{<local_part>}:  
+  \item \textbf{<domain_name>}: Hostname of an email server, must compy to DNS naming standards, like \textit{unviersity.innopolis.ru}  
+\end{itemize}
+
+
+
+\end{document}

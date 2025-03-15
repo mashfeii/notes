@@ -1,0 +1,263 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=2.5cm,right=2.5cm,marginparwidth=1.25cm]{geometry}
+
+\usepackage[leqno]{amsmath}
+\usepackage{enumitem, nccmath,lipsum,amssymb,xcolor,xparse,listings, blindtext}
+\usepackage[most]{tcolorbox}
+
+\NewDocumentCommand{\codeword}{v}{
+\texttt{\textcolor{blue}{#1}}
+}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+  backgroundcolor=\color{backcolour},   
+  commentstyle=\color{codegreen},
+  keywordstyle=\color{magenta},
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codepurple},
+  basicstyle=\ttfamily\footnotesize,
+  breakatwhitespace=true,         
+  breaklines=true,                 
+  captionpos=b,                    
+  keepspaces=false,                 
+  numbers=left,                    
+  numbersep=3pt,                  
+  showspaces=false,                
+  showstringspaces=false,
+  showtabs=false,                  
+  tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\NewDocumentCommand{\mynote}{+O{}+m}{%
+  \begingroup
+  \tcbset{%
+    noteshift/.store in=\mynote@shift,
+    noteshift=1.5cm
+  }
+  \begin{tcolorbox}[nobeforeafter,
+    enhanced,
+    sharp corners,
+    toprule=0.5pt,
+    bottomrule=0.5pt,
+    leftrule=0pt,
+    rightrule=0pt,
+    colback=green!10,
+    #1,
+    left skip=\mynote@shift,
+    right skip=\mynote@shift,
+    overlay={\node[right] (mynotenode) at ([xshift=-\mynote@shift]frame.west) {\textbf{Note:}} ;},
+    ]
+    #2
+  \end{tcolorbox}
+  \endgroup
+  }
+\makeatother
+
+\newcommand{\mytext}[1]% #1 = same as intertext
+{&\parbox{0.9\textwidth}{\rule{0pt}{.5\baselineskip}\\
+\textrm{#1}\\
+\rule{0pt}{.5\baselineskip}}&\\}
+
+\newcounter{exercise}
+\newcounter{problem}[exercise]
+\newcommand{\myitem}{\stepcounter{problem}\tag*{\alph{problem})}}
+
+\title{Operating Systems. Processes Communication}
+\author{Mashenkov Timofei}
+\begin{document}
+\maketitle{}
+
+\section*{Race Conditions}
+
+Situation when several processes try to access/modify shared resources at the same time.
+
+\subsection*{Avoiding Race Conditions}
+
+\textbf{Critical Regions}
+
+A way to prohibit more than one process from reading and writing the shared data at the same time → \textbf{mutual
+exclusion}
+
+\begin{itemize}
+  \item No two processes may be simultaneously inside their critical regions.
+  \item No assumptions may be made about speed or the number of CPUs.
+  \item No process running outside its critical region may block other processes.
+  \item No process should have to wait forever to enter its crtical region.
+\end{itemize}
+
+How to implement mutual exclusion?
+
+\textbf{Disabling Interrupts}
+
+\textbf{Lock Variables}
+
+A possible software solution, but this idea contains fatal flaw that is called \textbf{Deadlock}:
+
+\begin{itemize}
+  \item To have a shared variable (lock) that is initially 0
+  \item A process entering its critical region tests the lock first
+  \item Lock == 0? The process sets it to 1 and enters the critical region
+  \item Lock == 1? The process waits until the lock is set to 0
+\end{itemize}
+
+\textbf{Strict Alternation}
+
+\begin{itemize}
+  \item To have an integer variable (turn) that is initially 0
+  \item Process 0 finds it to be 0, and enters its critical region
+  \item Process 1 also finds 
+\end{itemize}
+
+\textbf{The Producer-Consumer Problem}
+
+\begin{itemize}
+  \item To keep track of the number of items in the buffer, we will need a variable, \textbf{\textit{count}}
+  \item The producer's code will first test to see if count is N (the maximum number of items in the buffer) 
+  \item If it is, the producer will go to sleep; if it is not, the producer will add an item and increment count 
+  \item Consumer first tests \textbf{\textit{count}} to see if it is 0
+  \item If it is, go to sleep; if it is nonzero, remove an item and decrement the counter 
+  \item Each of the processes also tests to see if the other should be awakened, and if so, wakes it up
+\end{itemize}
+
+\textbf{Semaphores}
+
+\begin{itemize}
+  \item Proposed by Dijkstra In 1965 
+  \item an integer variable to count the number of wake-ups saved for future use - a \textbf{semaphore}
+  \item has a positive value if one or more wake-ups were pending, 0 otherwise
+  \item two operations: \textbf{down} and \textbf{up} (generalizations of sleep a \textbf{wake-up}, respectively)
+  \item the down operation checks if the value is greater than 0. If so, it decrements the value (i.e., uses up one
+    stored wake-up) and just continues
+\end{itemize}
+
+\begin{lstlisting}[language=C]
+#define N 100 // number of slots in the buffer
+typedef int semaphore; // semaphores are a special kind of int 
+semahpore mutex = 1; // controls access to critical region
+semaphore empty = N; // counts empty buffer slots
+semphore full = 0; // count full buffer slots
+
+void producer(void) {
+  int item;
+
+  while (TRUE) {
+    item = produce_item(); // generate something to put in buffer
+    down(&empty); // decrement empty count
+    down(&empty); // enter critical region
+    insert_item(item); // put new item in buffer
+    up(&mutex); // leave critical region
+    up(&full); // counts full buffer slots
+  }
+}
+
+void consumer(void) {
+  int item;
+  while (TRUE) {
+    down(&full); // decrement full count
+    down(&mutex); // enter critical reigon
+    item = remove_item(); // take item from buffer
+    up(&mutex); // leave critical region
+    up(&empty); // increment count of empty slots
+    consume_item(item); // do something with the item
+  }
+}
+\end{lstlisting}
+
+\textbf{Monitor}
+
+\begin{itemize}
+  \item A monitor is a higher-level synchronization primitive - it is a collection of procedures, variables, and data
+    structures that are all grouped together in a special kind of 
+\end{itemize}
+
+\begin{lstlisting}[language=C]
+monitor ProducerConsumer
+  condition full, empty;
+  integer count;
+
+  procedure insert(item: integer);
+  begin
+    if count = N then wait(full);
+    insert_item(item);
+    count := count + 1;
+    if count = 1 then signal(empty);
+  end;
+
+  procedure remove: integer;
+  begin
+    if count = 0 then wait(empty);
+    remove = remove_item;
+    count := count - 1;
+    if count = N - 1 then signal(full);
+  end;
+
+  count := 0;
+end monitor;
+\end{lstlisting}
+
+\textbf{Message Passing}
+
+Method of IPC that uses two primitives, send and receive, which, like semaphores and unlike monitors, are system calls
+rather than language constructs.
+They can easily be put into library procedures, such as:
+\begin{itemize}
+  \item send(destination, \&message);
+  \item receive(source, \&message);
+\end{itemize}
+
+\begin{lstlisting}[language=C]
+send(int fd, char* buf, int count);
+write(int fd, char* buf, int count);
+
+fd = open("file", "r"); // file descriptor
+
+int arr[2];
+pipe(arr);
+int fd_int = arr[0], fd_out = arr[1];
+
+if (fork()) { // fork() > 0 -> parent process
+  write(fd_out, "hi, child", strlen("hi, child"));
+} else { // child process
+  read(fd_in, buf, strlen("hi, child"));
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=C]
+#include <stdlib.h>
+#include <unistd.h>
+
+int fields[2];
+const int BSIZE = 100;
+char buf[BSIZE];
+ssize_t nbytes;
+int status; 
+
+status = pipe(fields);
+if (status == - 1) {
+  // an error occurred
+}
+switch(fork()) {
+case -1: // handle error
+  break;
+case 0: // child 
+  close(fields[0]); // write end is unused
+  nbytes = read(fields[0], buf, BSIZE); // get data from pipe
+  close(fields[0]); // finished with pipe
+  exit(EXIT_SUCCESS);
+default: // parent
+  close(fields[0]); // read end is unused
+  write(fields[1], "Hello world\n", 12); // write data on pipe
+  close(fields[0]); // child will see EOFJ
+  exit(EXIT_SUCCESS);
+}
+\end{lstlisting}
+
+\end{document}

@@ -1,0 +1,77 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=2.5cm,right=2.5cm,marginparwidth=1.25cm]{geometry}
+
+\usepackage[leqno]{amsmath}
+\usepackage{enumitem, nccmath,lipsum,amssymb}
+
+\newcommand{\mytext}[1]% #1 = same as intertext
+{&\parbox{0.9\textwidth}{\rule{0pt}{.5\baselineskip}\\
+\textrm{#1}\\
+\rule{0pt}{.5\baselineskip}}&\\}
+
+\newcounter{exercise}
+\newcounter{problem}[exercise]
+\newcommand{\myitem}{\stepcounter{problem}\tag*{\alph{problem})}}
+
+\title{Week 12 Lab}
+\author{Mashenkov Timofei}
+\begin{document}
+\maketitle{}
+
+\section*{Statistics}
+
+Statistics works with real processes, facts, factors, etc. It is a part of a process of making a decision. Probability theory gave "toolkit" that can be used in statistics scenarios.
+
+Most following tasks will be based on either normal or ... distributions.
+
+For normal distribution:
+
+\begin{equation*}
+  \begin{aligned}
+    P(-Z\frac{\alpha}{2}<Z<Z\frac{\alpha}{2})=1-\alpha\\ 
+    P(-Z\frac{\alpha}{2}<\frac{\bar{x}-\mu}{\frac{\sigma}{\sqrt{n}}}<Z\frac{\alpha}{2})=1-\alpha \cr
+    P(-\frac{\sigma}{\sqrt{n}}Z\frac{\alpha}{2}<\mu<\bar{x}+\frac{\sigma}{\sqrt{n}}Z\frac{\alpha}{2})=1-\alpha \cr
+  \end{aligned}
+\end{equation*}
+
+\subsection*{Exercise 1.}
+Constant is measured 25 times using a measurement device that has no systematic error and has normally distributed random errors with $\sigma = 10m$. Find 99\% confidence interval for a constant value if $\bar{x} = 100m$
+
+\begin{fleqn}[1\parindent]
+  \begin{gather*}
+    \xi_1,\dots,\xi_n - \text{ undefined same distribution with mean } \mu \text{ and variance } \sigma^2 \\
+    S_n = \sum_{i = 1}^n{\xi_i} \\ 
+    \frac{S_n - \mu n}{\sigma \sqrt{n}} \sim N(0,1) \\
+    \frac{n(\frac{s_n}{n} - \mu)}{n(\sigma - \frac{1}{\sqrt{n}})} = \frac{\frac{S_n}{n} -
+    \mu}{\frac{\sigma}{\sqrt{n}}} = \frac{\bar{x} - \mu}{\frac{\sigma}{\sqrt{n}}} \\ \\
+    1 - \alpha = 0.99 \\ 
+    \alpha = 0.01 \\ 
+    (100 - \frac{10}{5}Z_{0.005}, 100 + 2Z_{0.005}) \\
+  \end{gather*}
+\end{fleqn}
+
+\subsection*{Exercise 2.}
+
+\begin{fleqn}
+  \begin{gather*}
+    x_1,\dots,x_n;\ \bar{x} = \frac{\sum_{i=1}^n{x_i}}{n} \\ 
+    S^2 = \frac{\sum_{i = 1}^n(x_i - \bar{x})^2}{n - 1} \\ 
+    x_i \sim Dist(\theta, \dots) \\ 
+    \hat{\theta} = \hat{\theta}(x_1, \dots, x_n), \text{ where } \hat{\theta} \text{ is unbiased mark of } \theta \text{ if } E(\hat{\theta}) = \theta \\ 
+  \end{gather*}
+\end{fleqn}
+
+\begin{fleqn}
+  \begin{gather*}
+    \sigma^2 =ES^2 = E(\frac{\sum_{i = 1}^n{(x_i - \bar{x})^2}}{n - 1}) = \\ 
+    \frac{1}{n-1}E\sum = \frac{1}{n-1}\sum_{i=1}^n{E(x_i-\bar{x})^2} \\ \\ 
+    \forall i: E(x_i - \bar{x})^2 = E(x_i^2 - 2x_i\bar{x}+\bar{x}^2) = \\ 
+    Ex_i^2 - 2Ex_i\bar{x} + E\bar{x}^2 = \frac{1}{n -
+    1}(\sum_{i=1}^n{Ex_i^2}-2\sum_{i=1}^n{Ex_i\bar{x}}+\sum_{i=1}^n{E\bar{x}^2}) \\ \\
+    EX_i = \mu;\ VarX_i = EX_i^2 - (EX_i)^2 \\
+    VarX_i = \sigma^2;\ EX_i^2 = VarX_i + (EX_i)^2 \\
+  \end{gather*}
+\end{fleqn}
+
+\end{document}

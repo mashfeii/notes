@@ -1,0 +1,251 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=2.5cm,right=2.5cm,marginparwidth=1.25cm]{geometry}
+
+\usepackage[leqno]{amsmath}
+\usepackage{enumitem, nccmath,lipsum,amssymb,xcolor,xparse,listings, blindtext, tikz, pgfplots}
+\usepackage[most]{tcolorbox}
+
+\NewDocumentCommand{\codeword}{v}{
+\texttt{\textcolor{blue}{#1}}
+}
+
+\lstset{language=C, keywordstyle={\bfseries \color{blue}}}
+
+\newcommand{\RN}[1]{%
+  \textup{\uppercase\expandafter{\romannumeral#1}}%
+}
+
+\NewDocumentCommand{\mynote}{+O{}+m}{%
+  \begingroup
+  \tcbset{%
+    noteshift/.store in=\mynote@shift,
+    noteshift=1.5cm
+  }
+  \begin{tcolorbox}[nobeforeafter,
+    enhanced,
+    sharp corners,
+    toprule=0.5pt,
+    bottomrule=0.5pt,
+    leftrule=0pt,
+    rightrule=0pt,
+    colback=green!10,
+    #1,
+    left skip=\mynote@shift,
+    right skip=\mynote@shift,
+    overlay={\node[right] (mynotenode) at ([xshift=-\mynote@shift]frame.west) {\textbf{Note:}} ;},
+    ]
+    #2
+  \end{tcolorbox}
+  \endgroup
+  }
+\makeatother
+
+\newcommand{\mytext}[1]% #1 = same as intertext
+{&\parbox{0.9\textwidth}{\rule{0pt}{.5\baselineskip}\\
+\textrm{#1}\\
+\rule{0pt}{.5\baselineskip}}&\\}
+
+\newcounter{exercise}
+\newcounter{problem}[exercise]
+\newcommand{\myitem}{\stepcounter{problem}\tag*{\alph{problem})}}
+
+\title{Differential Equations: Lab.}
+\author{Mashenkov Timofei}
+\begin{document}
+\maketitle{}
+
+\section*{Week 11.}
+
+\subsection*{Task 1021.}
+
+\addtolength{\jot}{1pt}
+\begin{fleqn}[1\parindent]
+  \begin{gather*}
+    \begin{cases}
+      \dot{x}=2x+y^2-1\\ 
+      \dot{y}=6x-y^2+1
+    \end{cases} \rightarrow 
+    \frac{dy}{dx} = \frac{0}{0} \\ 
+    1)\ \begin{cases}
+      2x+y^2-1=0 \\ 
+      6x-y^2+1=0
+    \end{cases} \rightarrow 
+    \begin{matrix}
+      8x = 0 & 0-y^2+1=0 \\ 
+      x = 0 & y = \pm1
+    \end{matrix} \\ 
+    2)\ \begin{cases}
+      u=x-x_0 \\ 
+      v = y-y_0
+    \end{cases} \\ 
+    3)\ (x,y) = f(x_0,y_0)+f'_x(x_0,y_0)(x-x_0)+f'_y(x_0,y_0)(y-y_0) \\
+    4)\ \begin{cases}
+      \dot{u}=au+bv \\ 
+      \dot{v}=du+fv 
+    \end{cases} \\ 
+    5) \\ 
+    M_0(0;1) \\ 
+    \begin{cases}
+      u=x-x_0 \\ 
+      v=y-y_0
+    \end{cases} \\ 
+    M(0;-1) \\ 
+    \begin{cases}
+      u=x \\ 
+      v=y-1
+    \end{cases} \rightarrow
+    \begin{matrix}
+      \dot{u}_t=\dot{x}_t\\ 
+      \dot{v}_t=\dot{y}_t
+    \end{matrix} \\ 
+    \dot{u} = 2u+(v+1)-1=2u+v^2+2v+1-1 \\ 
+    \dot{v} = 6u-(v^2+2v+1)+1 \Rightarrow 
+    \begin{cases}
+      \dot{u}=2u+2v+v^2 \\ 
+      \dot{v}=6u-2v-v^2
+    \end{cases} \\ 
+    f(v) = v^2 = f(0)+f'_v(0)v=0 \\ 
+    v^2 = 0;\ 2v' = 0 \\ 
+    f(u,v)=f(0,0)+f'_v(u,v)\cdot v+f'_u(u,v)\cdot u \\
+    \begin{cases}
+      \dot{u} = 2u+2v \\ 
+      \dot{v} = 6u-2v
+    \end{cases} \\ 
+    \begin{vmatrix}
+      2-\lambda & 2 \\ 
+      6 & -2-\lambda
+    \end{vmatrix} = 0 \\ 
+    (\lambda-2)(\lambda+2)-12=0 \\ 
+    \lambda^2=16 \\ 
+    \lambda = \pm 4 \\ 
+  \end{gather*}
+\end{fleqn}
+
+\addtolength{\jot}{1pt}
+\begin{fleqn}[1\parindent]
+  \begin{gather*}
+    6)\ \text{Saddle point} \\
+    \lambda_1 = 4: \\ 
+    \begin{bmatrix}
+      2-4 & 2 \\ 
+      6 & -2-4
+    \end{bmatrix}\begin{pmatrix}
+      u \\ v
+    \end{pmatrix} = 0 \\ 
+    u = v \rightarrow \begin{pmatrix}
+      1 \\ 1
+    \end{pmatrix} \\ 
+    \lambda_2 = -4: \\
+    \begin{bmatrix}
+      6 & 2 \\ 
+      6 & 2
+    \end{bmatrix}
+    \begin{pmatrix}
+      u \\ v
+    \end{pmatrix} 
+    = 0 \rightarrow \begin{pmatrix}
+      1 \\ -3
+    \end{pmatrix} \\ 
+    v = -3u \\ 
+    \begin{cases}
+      \dot{u}=2u+2v \\ 
+      \dot{v}=6u-2v
+    \end{cases} \\
+    \text{Repeat for } M_1(0;-1): \\ 
+    \begin{cases}
+      u=x \\ 
+      v=y+1
+    \end{cases} \\
+    \dot{u}=2u+(v-2v+1)-1 \\ 
+    \dot{u}=2u-2v \\ 
+    \dot{v}=6u-(v^2-2v+1)-1 \\ 
+    \dot{v}=6u+2v \\ 
+    \begin{cases}
+      \dot{u}=2u-2v \\ 
+      \dot{v}=6u+2v
+    \end{cases} \\ 
+    \begin{vmatrix}
+      2-\lambda & -2 \\ 
+      6 & 2-\lambda
+    \end{vmatrix} = 0 \\ 
+    (2-\lambda)^2+12=0 \\ 
+    2-\lambda = \pm\sqrt{-12} \\ 
+    \lambda = 2 \pm \sqrt{-12} \\
+    \text {Focus, since Real part $>$ 0} \\ 
+  \end{gather*}
+\end{fleqn}
+
+\subsection*{Task 920.}
+
+\addtolength{\jot}{1pt}
+\begin{fleqn}[1\parindent]
+  \begin{gather*}
+    \begin{cases}
+      \dot{x}=-e^x+e^y \\ 
+      \dot{y}=\sqrt{3x+y^2}-2 
+    \end{cases} \\ 
+    \begin{cases}
+      \dot{u}=e(e^v-e^u) \\ 
+      \dot{v}=\sqrt{v^2+2v+3u+4}-2
+    \end{cases} \\ 
+    f(i,v)=e^u-e^0+e^v=1+v;\ e^u \approx 1+u \\ 
+    \dot{u}=-e^{u+1}+e^{v+1}=e(e^v-e^u) \\ 
+    \dot{v}=\sqrt{3(u+1)+(v+1)^2}-2 \\
+    \sqrt{v^2+2v+3u+4}=2+\frac{1}{\sqrt{4}}(2v+2)v+\frac{1}{2\sqrt{4}}\cdot 3 \cdot u = 
+    2+\frac{1}{2}v+\frac{3}{4}u \\ 
+    \begin{cases}
+      \dot{u}=e(1+v-(1+u)) \\ 
+      \dot{v}=2+\frac{v}{2}+\frac{3}{4}u-2
+    \end{cases} \\ 
+    \begin{cases}
+      \dot{u}=e(v-u) \\ 
+      \dot{v} =\frac{v}{2}+\frac{3}{4}u
+    \end{cases} \\ 
+    (e+\lambda)(\lambda-\frac{1}{2})-\frac{3}{4}e=0 \\ 
+    e\lambda-\frac{1}{2}e+\lambda^2-\frac{1}{2}\lambda-\frac{3}{4}e=0 \\
+    \lambda^2+\lambda(e - \frac{1}{2})-\frac{5}{4}e=0 \\ 
+    \lambda_{1,2}=\frac{-(e-\frac{1}{2})\pm\sqrt{(e-\frac{1}{2})^2+5e}}{2} \\
+    \boxed{\lambda_1\cdot\lambda_2 < 0 \rightarrow \text{ Saddle point}}
+  \end{gather*}
+\end{fleqn}
+
+\addtolength{\jot}{1pt}
+\begin{fleqn}[1\parindent]
+  \begin{gather*}
+    M_0(1;1) \rightarrow \boxed{\text{Unstable Saddle}} \\
+    M_1(-4;-4): \\ 
+    \lambda^2 +\lambda(2+\frac{1}{e^4})+\frac{5}{4e^4}=0 \\ 
+    \lambda_{1,2} < 0 \rightarrow \boxed{\text{Stable knot}}
+  \end{gather*}
+\end{fleqn}
+
+\subsection*{Task 1003.}
+
+\addtolength{\jot}{1pt}
+\begin{fleqn}[1\parindent]
+  \begin{gather*}
+    \ddot{x}-x+x^2=0 \\ 
+    \dot{x}=y \\ 
+    \begin{cases}
+      \dot{x}=y \\ 
+      \dot{y}=x-x^2
+    \end{cases} \\
+    M_0(0;0),\ M_1(1;0) \\
+  \end{gather*}
+\end{fleqn}
+
+\subsection*{Task 1009.}
+
+\addtolength{\jot}{1pt}
+\begin{fleqn}[1\parindent]
+  \begin{gather*}
+    \ddot{x}-\sin{x}=0 \\ 
+    \begin{cases}
+      \dot{x}=y=0 \\ 
+      \dot{y}=\sin{x}=0 \leftarrow x = \pi k
+    \end{cases} \\ 
+  \end{gather*}
+\end{fleqn}
+
+\end{document}

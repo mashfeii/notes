@@ -1,0 +1,156 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=2.5cm,right=2.5cm,marginparwidth=1.25cm]{geometry}
+
+\usepackage[leqno]{amsmath}
+\usepackage{enumitem, nccmath,lipsum,amssymb,xcolor,xparse,listings, blindtext}
+\usepackage[most]{tcolorbox}
+
+\NewDocumentCommand{\codeword}{v}{
+\texttt{\textcolor{blue}{#1}}
+}
+
+\lstset{language=C, keywordstyle={\bfseries \color{blue}}}
+
+\NewDocumentCommand{\mynote}{+O{}+m}{%
+  \begingroup
+  \tcbset{%
+    noteshift/.store in=\mynote@shift,
+    noteshift=1.5cm
+  }
+  \begin{tcolorbox}[nobeforeafter,
+    enhanced,
+    sharp corners,
+    toprule=0.5pt,
+    bottomrule=0.5pt,
+    leftrule=0pt,
+    rightrule=0pt,
+    colback=green!10,
+    #1,
+    left skip=\mynote@shift,
+    right skip=\mynote@shift,
+    overlay={\node[right] (mynotenode) at ([xshift=-\mynote@shift]frame.west) {\textbf{Note:}} ;},
+    ]
+    #2
+  \end{tcolorbox}
+  \endgroup
+  }
+\makeatother
+
+\newcommand{\mytext}[1]% #1 = same as intertext
+{&\parbox{0.9\textwidth}{\rule{0pt}{.5\baselineskip}\\
+\textrm{#1}\\
+\rule{0pt}{.5\baselineskip}}&\\}
+
+\newcounter{exercise}
+\newcounter{problem}[exercise]
+\newcommand{\myitem}{\stepcounter{problem}\tag*{\alph{problem})}}
+
+\title{Physics: Quiz 4 2023. Variant 2.}
+\author{Mashenkov Timofei}
+\begin{document}
+\maketitle{}
+
+\section*{Formulas from current theme.}
+
+\begin{equation*}
+  \sum{M_i} = 0 - \text{ balance}
+\end{equation*}
+
+\begin{equation*}
+  x_c \frac{\sum{x_im_i}}{\sum{m_i}} - \text {COM}
+\end{equation*}
+
+\begin{equation*}
+  p = mv \text{ - momentum}
+\end{equation*}
+
+\begin{equation*}
+  \Delta (\sum{p_i}) = \int{Fdt} \text{ - changing the overall momentum}
+\end{equation*}
+
+\begin{equation*}
+  \sum{F} = ma 
+\end{equation*}
+
+\section*{Task 1.}
+
+Since we've got a balance, we should to write an equation of balance. \\
+In such equation there are as many sources as act on bar. \\
+First, we need to select a point of equilibrium.
+
+\addtolength{\jot}{1pt}
+\begin{fleqn}[1\parindent]
+  \begin{gather*}
+    M = F \cdot l - \text{ moment - distance from point} \cdot \text{force itself} \\
+    m_3 \text{ acts "clockwise", other two "counterclockwise", thus, the balance equation is the following:} \\
+    m_3g \cdot \frac{l}{2} - m_2g \cdot \frac{l}{4} - m_1g \cdot \frac{l}{2} = 0 \\
+    \begin{cases}
+      m_3 - m_2 - 2m_1 = 0 \\ 
+      m_3 = 5 \\ 
+      m_2 = 2m_1
+    \end{cases} \Rightarrow
+    \begin{cases}
+      \boxed{m_1 = 2.5} \\ 
+      \boxed{m_2 = 5} \\
+      m_3 = 5
+    \end{cases}
+  \end{gather*}
+\end{fleqn}
+
+\section*{Task 2.}
+
+The center of mass of any system of objects: $x_c = \frac{\sum{m_i \cdot x_i}}{\sum{m_i}}$ \\ 
+First, we take the final position of cat as a center of coordinates. 
+
+\addtolength{\jot}{1pt}
+\begin{fleqn}[1\parindent]
+  \begin{gather*}
+    \frac{xm_c+(x - \frac{d}{2})m_b}{m_c+m_b} = \frac{0 \cdot m_c + \frac{d}{2}m_b}{m_c+m_b}
+    \text{ - center of mass in 1st case.} \\ 
+    x \cdot 3 + 12x - 14.4 = 14.4 \\ 
+    x = \frac{28.8}{15} = \frac{9.6}{5} = \boxed{1.92}
+  \end{gather*}
+\end{fleqn}
+
+\section*{Task 3.}
+
+\addtolength{\jot}{1pt}
+\begin{fleqn}[1\parindent]
+  \begin{gather*}
+    \Delta \vec p = \vec F \cdot \Delta t \\
+    \begin{cases}
+      \Delta p_x = -F_x\Delta t = 0 - mv_1 \\ 
+      \Delta p_y = F_y(-\Delta t) \\ 
+      F_x^2 + F_y^2 = 400^2 
+    \end{cases} \\ 
+    F_x = \frac{mv_1}{\Delta t} = \frac{2.5}{0.04} = \frac{250}{4} = 62.5 \\ 
+    F_y = \sqrt{(400^2 - F_x^2)} \\
+    v_2 = \frac{F_y \Delta t}{m} = 4\sqrt{16^2-\Big(\frac{10}{4}\Big)^2} =
+    \sqrt{64^2-10^2} = \sqrt{3996} \approx \boxed{63.2134}
+  \end{gather*}
+\end{fleqn}
+
+\section*{Task 4.}
+
+\addtolength{\jot}{1pt}
+\begin{fleqn}
+  \begin{gather*}
+    \frac{kx^2}{2} = \frac{m_1v_1^2}{2} = \frac{m_1v_1'^2}{2} + m_1gh
+    \text{ — energy from compression goes into ball speed.} \\ 
+    \frac{m_1v_1'^2}{2}=\frac{m_1u_1^2}{2}+\frac{m_2u_2^2}{2}
+    \text{ — energy conservation law} \\
+    m_1v_1' = m_1u_1 + m_2u_2
+    \text{ — momentum conservation law} \\
+    u_{1x} = v_1' - \frac{m_2u_2}{m_1} \\ 
+    v_1'^2 = \Big(v_1' - \frac{m_2}{m_1}u_2\Big)^2+\frac{m_2}{m_1}u_2^2 \\
+    v_1'=\frac{\frac{m_2^2}{m_1^2}u_2^2+\frac{m_2}{m_1}u_2^2}{2\frac{m_2}{m_1}u_2} \\
+    v_1'=\frac{m_2u_2}{2m_1}+\frac{u_2}{2}=2u_2=8 \\
+    x=
+    \sqrt{\frac{m_1v_1'^2+2m_1gh}{k}}=
+    \sqrt{\frac{6.4+6}{10^3}}=
+    \frac{\sqrt{124}}{100} \approx \boxed{0.11} 
+  \end{gather*}
+\end{fleqn}
+
+\end{document}

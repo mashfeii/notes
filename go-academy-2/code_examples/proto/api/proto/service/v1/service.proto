@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package api.proto.service.v1;
+
+option go_package = "github.com/mashfeii/link-gopher/api/proto/v1";
+
+service EchoService { rpc Echo(EchoRequest) returns (EchoResponse); }
+
+message EchoRequest { string message = 1; }
+
+message EchoResponse {
+  string message = 1;
+  string time = 2 [ deprecated = true ];
+  string ip = 3;
+  string user_agent = 4;
+}

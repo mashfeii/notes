@@ -1,0 +1,215 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=2.5cm,right=2.5cm,marginparwidth=1.25cm]{geometry}
+
+\usepackage[leqno]{amsmath}
+\usepackage{enumitem, nccmath,lipsum,amssymb,xcolor,xparse,listings, blindtext}
+\usepackage[most]{tcolorbox}
+
+\NewDocumentCommand{\codeword}{v}{
+\texttt{\textcolor{blue}{#1}}
+}
+
+\lstset{language=C, keywordstyle={\bfseries \color{blue}}}
+
+\NewDocumentCommand{\mynote}{+O{}+m}{%
+  \begingroup
+  \tcbset{%
+    noteshift/.store in=\mynote@shift,
+    noteshift=1.5cm
+  }
+  \begin{tcolorbox}[nobeforeafter,
+    enhanced,
+    sharp corners,
+    toprule=0.5pt,
+    bottomrule=0.5pt,
+    leftrule=0pt,
+    rightrule=0pt,
+    colback=green!10,
+    #1,
+    left skip=\mynote@shift,
+    right skip=\mynote@shift,
+    overlay={\node[right] (mynotenode) at ([xshift=-\mynote@shift]frame.west) {\textbf{Note:}} ;},
+    ]
+    #2
+  \end{tcolorbox}
+  \endgroup
+  }
+\makeatother
+
+\newcommand{\mytext}[1]% #1 = same as intertext
+{&\parbox{0.9\textwidth}{\rule{0pt}{.5\baselineskip}\\
+\textrm{#1}\\
+\rule{0pt}{.5\baselineskip}}&\\}
+
+\newcounter{exercise}
+\newcounter{problem}[exercise]
+\newcommand{\myitem}{\stepcounter{problem}\tag*{\alph{problem})}}
+
+\title{Optimization. Test 2 Preparation}
+\author{Mashenkov Timofei}
+\begin{document}
+\maketitle{}
+
+\subsection*{Task 1.}
+
+\addtolength{\jot}{2pt}
+\begin{fleqn}[1\parindent]
+  \begin{gather*}
+    f(x_1,x_2) = 2x_1^2  x_2^2 + 6(x_1 + x_2) + 2x_1x_2 \\ 
+    \nabla{f} = \begin{bmatrix}\frac{\partial f}{\partial x_1} \\ \frac{\partial f}{\partial x_2}\end{bmatrix} =
+    \begin{bmatrix}0\\0\end{bmatrix} = \begin{bmatrix}4x_1+6+2x_2\\2x_2+6+2x_1\end{bmatrix} \begin{matrix}\leftarrow g_1(x_1,x_2)\\\leftarrow g_2(x_1,x_2)\end{matrix} \\
+    x_1 = x \\ 
+    x_2 = y \\ 
+    \begin{bmatrix}x_{k+1} \\ y_{k+1}\end{bmatrix} = \begin{bmatrix}x_k \\
+    y_k\end{bmatrix}-B^{-1}\begin{bmatrix}g_1(x,y) \\ g_2(x,y)\end{bmatrix} \\ 
+    B = \begin{bmatrix}4 & 2 \\ 2 & 2\end{bmatrix} \rightarrow B^{-1} = \frac{1}{4} \begin{bmatrix}2 & -2 \\ -2 & 4\end{bmatrix} \\
+    \begin{bmatrix}x_1\\y_1\end{bmatrix}=\begin{bmatrix}x_0\\y_0\end{bmatrix}-\frac{1}{4}\begin{bmatrix}2&-2\\-2&4\end{bmatrix}\begin{bmatrix}4x_0+6+2y_0\\2y_0+6+2x_0\end{bmatrix}
+  \end{gather*}
+\end{fleqn}
+
+So we get the formula for the iteration, then we should substitute the values from condition, for the next iterations we
+will use the same formula but with the new values from previous iteration.
+
+\newpage
+\subsection*{Task 2.}
+
+\addtolength{\jot}{2pt}
+\begin{fleqn}[1\parindent]
+  \begin{gather*}
+    f(x_1,x_2,x_3) = x_1x_2+x_2x_3 \\ 
+    \begin{cases}
+      g_1(X) = x_1+x_2-4=0 \\ 
+      g_2(X) = x_2+x_3-4 = 0
+    \end{cases} \\
+    Y = (x_1,x_2) - \text{ dependent variables};\ z = (x_3) \\ 
+    \nabla{\textsubscript{Y}f}=\ 
+    \begin{bmatrix}
+      \frac{\partial f}{\partial x_1} & \frac{\partial f}{\partial x_2}\\
+      \frac{\partial f}{\partial x_2} & \frac{\partial f}{\partial x_3}
+    \end{bmatrix} = (x_2,x_1+x_3) \\
+    \nabla{\textsubscript{Z}f} = \frac{\partial f}{\partial x_3} = x_2 \\
+    J = \begin{bmatrix}
+      \frac{\partial g_1}{\partial x_1}&\frac{\partial g_1}{\partial x_2}\\
+      \frac{\partial g_2}{\partial x_1}&\frac{\partial g_2}{\partial x_2}
+    \end{bmatrix}=\begin{bmatrix}1&1\\0&1\end{bmatrix} \leftarrow \text{ Jacobian mentioned!} \\
+    \nabla \textsubscript{C}f=\nabla{\textsubscript{Z}f} - \nabla{\textsubscript{Y}f}J^{-1}C =
+        x_2-(x_2;x_1+x_3)\begin{bmatrix}1&-1\\0&1\end{bmatrix} \\
+    \begin{bmatrix}0\\1\end{bmatrix}=x_2-(x_2;x_1+x_3-x_2)\begin{bmatrix}0\\1\end{bmatrix}=2x_2-x_1-x_3 \\
+    \begin{cases}
+      2x_2-x_1-x_3=0 \\ 
+      x_1+x_2=4 \\ 
+      x_2+x_3=4
+    \end{cases}
+    \rightarrow 
+    \begin{bmatrix}
+      -1 & 2 &-1 \\ 
+      1 & 1 & 0 \\ 
+      0 & 1 & 1
+    \end{bmatrix}
+    \begin{bmatrix}
+      x_1 \\ x_2 \\ x_3
+    \end{bmatrix}
+    = \begin{bmatrix}
+      0 \\ 4 \\ 4
+    \end{bmatrix}\leftrightarrow \
+    X_0 = \color{blue}\begin{bmatrix}2\\2\\2\end{bmatrix} \leftarrow \text{ stationary point} \\ 
+    \begin{bmatrix}
+      \frac{dx_1}{dx_3}\\
+      \frac{dx_2}{dx_3}
+    \end{bmatrix} = -J^{-1}C = \begin{bmatrix}
+      -1 & -1 \\ 
+      0 & 1
+    \end{bmatrix}
+    \begin{bmatrix}
+      0 \\ 1
+    \end{bmatrix}
+    = 
+    \begin{bmatrix}
+      1 \\ - 1
+    \end{bmatrix} \leftarrow \text{ Jacobian mentioned!} \\ 
+    \nabla_C f = 2x_2-x_1-x_3 \rightarrow
+    \frac{\partial^2_C f}{\partial_C x^2_3} = -\frac{dx_1}{dx_3}+2\frac{dx_2}{dx_3}-1 =
+    -1-2-1 = -4 < 0 \Rightarrow X_0 - \text{ max}
+  \end{gather*}
+\end{fleqn}
+
+\addtolength{\jot}{2pt}
+\begin{fleqn}
+  \begin{gather*}
+    \nabla_Yf = (x_2;x_1+x_3) \\ 
+    \vec\lambda = \nabla_Yf \cdot J^{-1} = (2,4) \cdot \begin{bmatrix}
+      1 & -1 \\ 
+      0 & 1
+    \end{bmatrix} = \color{green}(2,2)\color{black} \leftarrow \text{ Jacobian mentioned!} \\
+    \text{where }\lambda \text{ is a sensitivity coefficient, that is found in stationary point } X_0 
+  \end{gather*}
+\end{fleqn}
+
+\addtolength{\jot}{2pt}
+\begin{fleqn}
+  \begin{gather*}
+    L(x,\lambda_1,\lambda_2) = f(x)-g_1(x)\lambda_1-g_2(x)\lambda_2 =\\ 
+    \= x_1x_2+x_2x_3-\lambda_1(x_1+x_2-4)-\lambda_2(x_2+x_3-4) \\
+    \nabla L = 0; \begin{bmatrix}
+      x_2-\lambda_1\\ 
+      x_1+x_3-\lambda_1-\lambda_2\\ 
+      x_2-\lambda_2\\ 
+      -x_1-x_2+4\\ 
+      -x_2-x_3+4
+      \end{bmatrix} = \begin{bmatrix}0\\0\\0\\0\\0\end{bmatrix} \rightarrow X_0 =
+      \begin{bmatrix}\color{blue}2\\\color{blue}2\\\color{blue}2\\\color{green}2\\\color{green}2\end{bmatrix} \\ 
+      H = \begin{bmatrix}
+        0 & 1 & 0 & -1 & 0 \\ 
+        1 & 0 & 1 & -1 & -1 \\ 
+        0 & 1 & 0 & 0 & -1 \\ 
+        -1 & -1 & 0 & 0 & 0 \\ 
+        0 & -1 & -1 & 0 & 0 
+      \end{bmatrix} \\ 
+      p = m+1; n \text { where m is the number of constrains g(x), n is the number of variables in f(x)} \\
+      (-1)^m \det H = -4 < 0 \Rightarrow \text{max, otherwise if } > 0 \Rightarrow \text{min}
+  \end{gather*}
+\end{fleqn}
+
+\newpage
+\subsection*{Task 3.}
+
+\addtolength{\jot}{1pt}
+\begin{fleqn}
+  \begin{gather*}
+    f(x_1,x_2,x_3) = x_1+2x_3+x_2x_3-x_1^2-x_2^2-x_3^2 \\
+    \nabla f = 0; \begin{bmatrix}
+      1-2x_1 \\ 
+      x_3-2x_2\\ 
+      2+x_2-2x_3 
+    \end{bmatrix} = \begin{bmatrix}
+      0 \\ 0 \\ 0
+    \end{bmatrix} \\ 
+    X_0 = \begin{bmatrix}
+      1/2 \\ 2/3 \\ 4/3 
+    \end{bmatrix} \\ 
+    H = \begin{bmatrix}
+      -2 & 0 & 0 \\ 
+      0 & -2 & 1 \\ 
+      0 & 1 & -2
+    \end{bmatrix} \\ 
+    \text {Positive (Niggative) definite, to validate we should take determinant of 1x1, 2x2, ..., } nxn \text{ matrices} \\
+    \text {In Positive: all determinants more than zero; In Negative: signs alternate starting from "-"} \\ 
+    \text {Alternative method to determine in case of several variables in objective function: } \\ 
+    f(x, y) \\ 
+    \nabla f = 0; \begin{bmatrix}x_0\\y_0\end{bmatrix}\\ 
+    \nabla \nabla f(x_0,y_0) \neq \begin{bmatrix}0\\0\end{bmatrix}\\
+  \end{gather*}
+\end{fleqn}
+
+% Y = (x_1,x_2);\ \nabla_Y f = (x_2;x_1+x_3);\ 
+% \vec \lambda = \nabla_Y f \cdot J^{-1} = (2,4)\begin{bmatrix}1&-1\\0&1\end{bmatrix}=(2,2) \\ 
+
+\subsection*{Bonus Task.}
+
+\mynote{If the Hessian is negative definite for all values of x then the function is strictly concave, and if the
+  Hessian is positive definite for all values of x then the function is strictly convex.}
+
+Other path of solution look in \codeword{C:/Users/ilia1/Downloads/Lab%209.pdf}
+
+\end{document}
