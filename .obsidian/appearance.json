@@ -1,8 +1,9 @@
 {
   "accentColor": "",
-  "cssTheme": "Catppuccin",
+  "cssTheme": "Minimal",
   "theme": "obsidian",
-  "monospaceFontFamily": "MartianMono Nerd Font",
+  "monospaceFontFamily": "JetBrainsMono Nerd Font,MartianMono Nerd Font",
   "textFontFamily": "Inter",
-  "interfaceFontFamily": "Inter"
+  "interfaceFontFamily": "Inter",
+  "baseFontSizeAction": true
 }
