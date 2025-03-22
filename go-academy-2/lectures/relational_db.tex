@@ -1,0 +1,180 @@
+\documentclass{article}
+
+\usepackage{titlesec}
+\titlelabel{\thetitle.\quad}
+
+\usepackage[T1]{fontenc}
+\usepackage{inconsolata}
+
+\usepackage[english]{babel}
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=2cm,right=2cm,marginparwidth=1.25cm]{geometry}
+
+\usepackage{hyperref, booktabs, float}
+\usepackage[leqno]{amsmath}
+\usepackage{enumitem, nccmath,lipsum,amssymb,xcolor,xparse,listings, blindtext}
+\usepackage[most]{tcolorbox}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\usepackage{graphicx}
+\graphicspath{ {./attachments/} }
+
+\definecolor{light-gray}{gray}{0.9}
+\newcommand{\code}[1]{\colorbox{light-gray}{\texttt{#1}}}
+
+\title{Relational Databases and SQL}
+\author{Mashenkov Timofei \\ \href{t.me/mashfeii}{mashfeii}}
+\begin{document}
+\maketitle{}
+
+\section{Relational Databases}
+\noindent
+
+Relational database is structured table-based data storage. It consists of several entities:
+
+\begin{itemize}
+  \item \textbf{Table} - a collection of data organized in rows and columns with its own name.
+  \item \textbf{Column} - a set of data values of a particular type. 
+  \item \textbf{Row} - a single record in a table.
+  \item \textbf{Data} - actual values stored in a table in \code{column x row} place.
+  \item \textbf{Primary Key} - a unique identifier for each row in a table.
+\end{itemize}
+
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|c|c|c|}
+    \toprule
+    Name & Surname & Age \\ \midrule
+    Timofei & Mashenkov & 20 \\
+    John & Doe & 30 \\ 
+    Jane & Doe & 25 \\ \bottomrule 
+  \end{tabular}
+  \caption{Possible database view}
+\end{table}
+
+\subsection{Normalization Forms}
+\noindent
+
+Normalization is a process of organizing data in a database. It is done to reduce redundancy and improve data integrity. There are several normalization forms:
+
+\begin{itemize}
+  \item \textbf{First Normal Form (1NF)} - each column should contain atomic (non-splitting) values, and there should be no repeating groups (attributes).
+  \item \textbf{Second Normal Form (2NF)} - the table should be in 1NF and all non-key attributes should be fully functional dependent on the primary key.
+  \item \textbf{Third Normal Form (3NF)} - the table should be in 2NF and all non-key attributes should be non-transitively dependent on the primary key (depend only on key attributes).
+  \item \textbf{Boyce-Codd Normal Form (BCNF)} - the table should be in 3NF and for every functional dependency, the left-hand side should be a super key.
+  \item \textbf{Fourth Normal Form (4NF)} - the table should be in BCNF and there should be no multivalued dependencies.
+  \item \textbf{And more...} 
+\end{itemize}
+
+\subsection{Tables Relationships}
+\noindent
+
+\begin{itemize}
+  \item \textbf{One-to-One} - each record in the first table is related to one record in the second table. 
+  \item \textbf{One-to-Many} - each record in the first table is related to one or more records in the second table.
+  \item \textbf{Many-to-Many} - each record in the first table is related to one or more records in the second table, and each record in the second table is related to one or more records in the first table.
+\end{itemize}
+
+\begin{lstlisting}[language=SQL, caption={Creating tables in SQL}]
+  CREATE TABLE grades
+  (
+    grade_id INT PRIMARY KEY, -- Unique identifier
+    student_id INT NOT NULL, -- Foreign key
+    course_id INT NOT NULL, -- Foreign key
+    grade DECIMAL(3, 1) NOT NULL CHECK (grade >= 0 AND grade <= 5) -- Grade value from 0 to 5
+    grade_date DATE NOT NULL DEFAULT CURRENT_DATE -- Date of the grade
+
+    FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
+    -- Connection with student
+    
+    FOREIGN KEY (course_id) REFERENCES courses(course_id) ON DELETE CASCADE
+    -- Connection with course
+  );
+\end{lstlisting}
+
+\subsection{Joins}
+\noindent
+
+\begin{itemize}
+  \item \code{LEFT JOIN} - returns all records from the left table and the matched records from the right table.
+  \item \code{RIGHT JOIN} - returns all records from the right table and the matched records from the left table.
+  \item \code{INNER JOIN} - returns only the records that have matching values in both tables.
+  \item \code{OUTER JOIN} - returns all records when there is a match in either left or right table.
+  \item \code{FULL JOIN} - returns all records when there is a match in either left or right table.
+\end{itemize}
+
+\section{Transactions}
+\noindent
+
+Transaction is a sequence of operations performed as a single logical unit of work. It is a set of SQL statements that are executed as a single unit. Transactions are used to ensure data integrity and consistency.
+
+\subsection{ACID}
+\noindent
+
+A set of properties that guarantee that database transactions are processed reliably.
+
+\begin{itemize}
+    \item \textbf{Atomicity} - all operations in a transaction are completed successfully or none of them are.
+    \item \textbf{Consistency} - the database remains in a consistent state before and after the transaction.
+    \item \textbf{Isolation} - transactions are executed independently and do not interfere with each other.
+    \item \textbf{Durability} - changes made by a transaction are permanent and cannot be lost.
+\end{itemize}
+
+\subsection{Isolation Levels}
+\noindent
+
+A property that defines how transactions interact with each other.
+
+\begin{itemize}
+  \item \textbf{Read Uncommitted} - concurrent transactions can read uncommitted data.
+  \item \textbf{Read Committed} - concurrent transactions can read only committed data.
+  \item \textbf{Repeatable Read} - Read Committed + the same \code{SELECT} inside single transaction guarantees the same result.
+  \item \textbf{Serializable} - dependent transactions are executed sequentially.
+\end{itemize}
+
+\textbf{Dirty Read}:
+
+Reading of yet uncommitted data. First transaction modifies data, but the second transaction reads it before the first transaction commits.
+
+\textbf{Lost Update:} 
+
+Update for the same data within both concurrent transactions. First transaction modifies data, and the second transaction modifies it again. As a result one transaction is rewritten.
+
+\textbf{Non-Repeatable Read}:
+
+Can be observed when we commit the first transaction that updated the data, and select values within the second one. Based on updated data the second transaction could be rolled back since transaction needs to be executed again with new values.
+
+\textbf{Phantom Read}:
+
+Can be observed when we commit the first transaction that inserted new data, and select values within the second one. Based on new data the second transaction could be rolled back since transaction needs to be executed again with new values.
+
+\textbf{Serialization Anomaly:} 
+
+Unpredictable result after concurrent transactions' execution, which can be changed based on transactions' execution order.
+
+\end{document}

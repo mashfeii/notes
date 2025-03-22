@@ -1,0 +1,253 @@
+\documentclass{article}
+
+\usepackage{titlesec}
+\titlelabel{\thetitle.\quad}
+
+\usepackage[T1]{fontenc}
+\usepackage{inconsolata}
+
+\usepackage[english]{babel}
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=2cm,right=2cm,marginparwidth=1.25cm]{geometry}
+
+\usepackage{hyperref, booktabs, float}
+\usepackage[leqno]{amsmath}
+\usepackage{enumitem, nccmath,lipsum,amssymb,xcolor,xparse,listings, blindtext}
+\usepackage[most]{tcolorbox}
+
+\setlength{\parindent}{6pt}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\usepackage{graphicx}
+\graphicspath{ {./attachments/} }
+
+\definecolor{light-gray}{gray}{0.9}
+\newcommand{\code}[1]{\colorbox{light-gray}{\texttt{#1}}}
+
+\title{NoSQL Databases}
+\author{Mashenkov Timofei \\ \href{t.me/mashfeii}{mashfeii}}
+\begin{document}
+\maketitle{}
+
+\section{Types of Databases}
+\noindent
+
+\begin{itemize}
+  \item \textbf{NoSQL}
+    \begin{itemize}
+      \item Document Stores
+      \item Key-Value Stores
+      \item Column-Family Stores
+      \item Graph Databases
+    \end{itemize}
+  \item \textbf{NewSQL}
+    \begin{enumerate}
+      \item Google Spanner
+      \item CockroachDB
+      \item VoltDB
+    \end{enumerate}
+  \item \textbf{Graph}
+    \begin{itemize}
+      \item Neo4j
+      \item JanusGraph
+    \end{itemize}
+  \item \textbf{Time Series}
+    \begin{itemize}
+      \item InfluxDB
+      \item TimescaleDB
+      \item OpenTSDB
+    \end{itemize}
+  \item \textbf{In-Memory}
+    \begin{itemize}
+      \item Redis
+      \item Memcached
+    \end{itemize}
+  \item \textbf{Object Storage} 
+    \begin{itemize}
+      \item Amazon S3
+      \item Google Cloud Storage
+    \end{itemize}
+\end{itemize}
+
+\subsection{NoSQL Databases}
+\noindent
+
+\subsubsection{Document Stores}
+\noindent
+
+\begin{itemize}
+  \item \textbf{MongoDB} - Document Store
+  \item \textbf{CouchDB} - Stores data as JSON documents and supports RESTful API
+  \item \textbf{ArangoDB} - Multi-model database
+  \item \textbf{RethinkDB} - Real-time database, pushes data updates to connected clients
+\end{itemize}
+
+\subsubsection{Column-Family Stores}
+\noindent
+
+\begin{itemize}
+  \item \textbf{Apache Cassandra} - Distributed database system
+  \item \textbf{Apache HBase} - Open-source implementation of Google BigTable (almost unused nowadays)
+  \item \textbf{ScyllaDB} - High-performance NoSQL database
+\end{itemize}
+
+\section{Why are there so many types of databases?}
+\noindent
+
+Let's try as an example build a simple social network, initially we contain the following entities:
+
+\begin{itemize}
+  \item Users
+  \item Posts
+  \item Comments
+\end{itemize}
+
+\subsection{SQL Databases: PostgreSQL}
+\noindent
+
+\colorbox{green}{\textbf{Advantages:}}
+
+\begin{itemize}
+  \item The data is normalized 
+  \item The application is working
+  \item Fixes are made with standard DB toolkit
+\end{itemize}
+
+\colorbox{red}{\textbf{Disadvantages:}}
+
+\begin{itemize}
+  \item To get the data we had to write a lot of SQL queries
+  \item Since it gets a lot of data, it gets very slow
+  \item Front-end fixes are done with hands and often with downtime
+\end{itemize}
+
+\subsubsection{NoSQL Databases: MongoDB}
+\noindent
+
+\colorbox{green}{\textbf{Advantages:}}
+
+\begin{itemize}
+  \item There is no complex joins
+  \item Flexible schema - we can add whatever we want
+  \item Faster reading
+  \item Horizontal scaling
+\end{itemize}
+
+\colorbox{red}{\textbf{Disadvantages:}}
+
+\begin{itemize}
+  \item No ACID transactions
+  \item Complex connections are hard and expensive to make
+\end{itemize}
+
+\subsubsection{How to Split the Data into Collections?}
+\noindent
+
+\textbf{Nested:} 
+
+\begin{itemize}
+  \item Data goes together in requests
+  \item Object always lives in the parent's context
+  \item Nested objects weight limited
+\end{itemize}
+
+\textbf{Linked/Separate:}
+
+\begin{itemize}
+  \item Data is used separately
+  \item Object could have many links to other objects
+  \item Avoid data duplication
+\end{itemize}
+
+\section{Analytics}
+\noindent
+
+\subsection{Analytical Queries in Production}
+\noindent
+
+\colorbox{green}{\textbf{Advantages:}}
+
+\begin{itemize}
+  \item Data is always up-to-date
+  \item Just write queries
+\end{itemize}
+
+\colorbox{red}{\textbf{Disadvantages:}}
+
+\begin{itemize}
+  \item Production is getting slow and can be down
+  \item There are laws regulating the user data
+\end{itemize}
+
+\subsection{OLTP - Online Transaction Processing}
+\noindent
+
+\begin{itemize}
+  \item \textbf{Goal} - fast transaction processing 
+  \item \textbf{Example} - web-shops, bank systems, CRM, ERP
+  \item \textbf{Data Structure} - normalized (3NF) databases 
+  \item \textbf{Data Volume} - small to medium
+  \item \textbf{Frequency of Operations} - high (many small transactions per second)
+  \item \textbf{Query Types} - simple \code{SELECT}, \code{INSERT}, \code{UPDATE}, \code{DELETE} 
+  \item \textbf{Consistency} - high, since data should be consistent in real-time
+\end{itemize}
+
+\subsection{OLAP - Online Analytical Processing}
+\noindent
+
+\begin{itemize}
+  \item \textbf{Goal} - data analysis, reports making, identifying trends/patterns
+  \item \textbf{Example} - data warehouses, business intelligence systems
+  \item \textbf{Data Structure} - denormalized schemas (star, snowflake) for fast access
+  \item \textbf{Data Volume} - large
+  \item \textbf{Frequency of Operations} - low (few complex queries per hour)
+  \item \textbf{Query Types} - aggregations (\code{SUM}, \code{AVG}, \code{COUNT}), \code{GROUP BY}
+  \item \textbf{Consistency} - eventual, since data is not required to be up-to-date
+\end{itemize}
+
+\section{Graph Databases}
+\noindent
+
+The main idea is to store connections between entities. For example, we need to store common friends between users.
+
+\textbf{When to use?} 
+
+\begin{itemize}
+  \item You need to store complex connections between objects (one-to-many, many-to-many)
+  \item If queries are connected with some depth (e.g. "Who is a friend of a friend through a friend?")
+  \item If data is too heterogeneous (different types of objects and connections)
+\end{itemize}
+
+\textbf{Caution:} 
+
+\begin{itemize}
+  \item Avoid super-nodes (nodes with a lot of connections)
+  \item Use directed connections
+  \item Use right granularity (not too many connections) for spreading the data
+\end{itemize}
+
+\end{document}
